@@ -65,6 +65,12 @@ const cart_pro_con = document.querySelector(".cart_pro_con");
 const total_price = document.querySelector(".total_price");
 const cart_test = document.querySelector(".cart_test");
 
+const fav_pro_con = document.querySelector(".fav_pro_con");
+const fav_show_icon = document.querySelector(".fav_show_icon");
+const fav_container = document.querySelector(".fav_container");
+const fav_show_btn = document.querySelector(".fav_show_btn");
+
+
 
 cart_show_btn.addEventListener("click", () => {
     if(cart_container.classList.contains("dis_none"))
@@ -95,7 +101,37 @@ cart_show_btn.addEventListener("click", () => {
         }
 })
 
+fav_show_btn.addEventListener("click", () => {
+    if(fav_container.classList.contains("dis_none"))
+        {
+            fav_container.classList.remove("dis_none");
+            fav_container.classList.add("dis_bl");
+            fav_show_icon.classList.remove("fa-heart");
+            fav_show_icon.classList.add("fa-xmark");
+            fav_show_icon.classList.add("fa-fade");
+            fav_show_btn.style.background = "#ff4603";
+            fav_show_btn.style.color = "white";
+            fav.style.display = "none";
+
+        } else {
+            fav_container.classList.add("dis_none");
+            fav_container.classList.remove("dis_bl");
+            fav_show_icon.classList.add("fa-heart");
+            fav_show_icon.classList.remove("fa-xmark");
+            fav_show_icon.classList.remove("fa-fade");
+            fav_show_btn.style.background = "";
+            fav_show_btn.style.color = "black";
+             if(fav_products.length === 0)
+                {
+                    fav.style.display = "none"
+                } else {
+                    fav.style.display = "flex"
+                }
+        }
+})
+
 let cart_products = [];
+let fav_products = [];
 let sum_price = 0;
 const cart_show = (pro_info, w_do ) => {
     const cart_filter = products.filter(e => e.info === pro_info)[0];
@@ -153,7 +189,7 @@ const cart_show = (pro_info, w_do ) => {
         {
             quantities.style.display = "flex"
             quantities.textContent = cart_products.length;
-            item_num.textContent = cart_products.length;
+            item_num[0].textContent = cart_products.length;
             cart_test.style.display = "block"
         } else {
             cart_pro_con.innerHTML = `
@@ -163,7 +199,7 @@ const cart_show = (pro_info, w_do ) => {
             `
             quantities.style.display = "none"
             cart_test.style.display = "none"
-            item_num.textContent = "No"
+            item_num[0].textContent = "No"
         }
 
     if(cart_show_icon.classList.contains("fa-fade"))
@@ -174,21 +210,85 @@ const cart_show = (pro_info, w_do ) => {
         }  
 }
 
+const fav_show = (fav_pro_con,fav_products) => {
+    fav_pro_con.innerHTML = "";
+    fav_products.forEach((e) => {
+        fav_pro_con.innerHTML += `
+        <div class = "fav_pro">
+            <div class="fav_img"><img src="${e.img}.png" alt=""></div>
+            <div class="fav_info">
+                <p class = "fav_pro_info">${e.info}</p>
+                <article>
+                    <span>Price : <em>$${e.price}</em></span>
+                    <button id="buy_now" class="b3 buy_btn">Buy Now</button>
+                    <button class="cart_btn b3"><i class="fa-solid fa-cart-shopping cart_chose"></i></button>
+                </article> 
+                <button class = "remove_btn"><i class="fa-solid fa-xmark fa-fade remove"></i></button>              
+            </div>
+        </div>
+        `
+    }) 
+
+    if(fav_products.length > 0 )
+        {
+            fav.textContent = fav_products.length;
+            item_num[1].textContent = fav_products.length;
+            if(fav_show_icon.classList.contains("fa-fade"))
+                {
+                    fav.style.display = "none";
+                } else {
+                    fav.style.display = "flex";
+                }
+        } else {
+            fav.style.display = "none";
+            item_num[1].textContent = "No"
+            fav_pro_con.innerHTML = `
+                <h4>
+                    <i class="fa-solid fa-cart-arrow-down fa-bounce"></i>
+                </h4>
+            `
+        }
+}
  
 product_box.forEach((e) => {
     e.addEventListener("click", (e) => {
 
+        const pro_info = e.target.closest(".product_box").querySelector(".pro_info").textContent;
+
         if( e.target.classList.contains("cart_btn") || e.target.classList.contains("cart_chose"))
         {
-            const pro_info = e.target.closest(".product_box").querySelector(".pro_info").textContent;
+           
             const w_do = "cart"
             cart_show(pro_info,w_do);
         }
 
         if(e.target.classList.contains("fa-heart"))
             {
-                const heart = e.target.closest(".product_box").querySelector(".fa-heart");
-                heart.style.color = "red";
+                const pro_box = e.target.closest(".product_box");
+                const heart = pro_box.querySelector(".fa-heart");
+                const love_btn = pro_box.querySelector(".love_btn");
+                const save = pro_box.querySelector(".save");
+                const fav = document.querySelector(".fav");
+
+                const fav_filter = products.filter(e => e.info === pro_info)[0];
+
+                if(heart.classList.contains("click"))
+                    {
+                        heart.classList.remove("click");
+                        heart.style.color = "";
+                        love_btn.style.opacity = .5;
+                        save.style.background = "";
+
+                        fav_products.splice(fav_products.indexOf(fav_filter),1)
+                    } else {
+                        heart.classList.add("click");
+                        heart.style.color = "red";
+                        love_btn.style.opacity = 1;
+                        save.style.background = "#38B5FA";
+                        fav_products.push(fav_filter);
+                    }
+
+                fav_show(fav_pro_con,fav_products);   
             }
             
     })
@@ -216,10 +316,32 @@ cart_pro_con.addEventListener("click", (e) => {
     
     if(e.target.classList.contains("remove"))
         {
-            console.log("l")
             const pro_info = e.target.closest(".cart_info").querySelector(".cart_pro_info").textContent;
             const w_do = "remove"
            
+            cart_show(pro_info,w_do);
+        }
+})
+
+fav_pro_con.addEventListener("click", (e) => {
+    // const fav_pro = document.querySelectorAll(".fav_pro");
+    // const fav_pro_info = document.querySelectorAll(".fav_pro_info");
+    const pro_info = e.target.closest(".fav_info").querySelector(".fav_pro_info").textContent;
+
+    if(e.target.classList.contains("remove"))
+        {
+            
+            const fav_filter = products.filter(e => e.info === pro_info)[0];
+            console.log(fav_filter.id);
+
+            fav_products.splice(fav_products.indexOf(fav_filter),1)
+            fav_show(fav_pro_con,fav_products);
+        }
+
+        if( e.target.classList.contains("cart_btn") || e.target.classList.contains("cart_chose"))
+        {
+            
+            const w_do = "cart"
             cart_show(pro_info,w_do);
         }
 })

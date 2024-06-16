@@ -6,6 +6,8 @@ import
     feat_next_btn,pc_product,laptops_product,monitors_product,motherboards_product,
     other_product,search_result,search_tag,menu_btn,menu_con,menu_bar,dark_btn,circle_btn,body,
     dark_icon,dark_text,brand_btn,all_btn,brand_icon,brands,b_price,a_price,go_btn,
+    hot_scroll,
+    feat_scroll,
 }
 from "./selector.js";
 
@@ -79,7 +81,7 @@ const product_show = (e1,e2) => {
                                     <div class="buy">
                                         <span>Price : <em>$${e2.price}</em></span>
                                         <button id="buy_now" class="b3 buy_btn">Buy Now</button>
-                                        <button class="cart_btn b3"><i class="fa-solid fa-cart-shopping cart_chose b3"></i></button>
+                                        <button class="cart_btn b3"><i class="fa-solid fa-cart-shopping cart_chose"></i></button>
                                         
                                     </div>
                                 </div>
@@ -115,7 +117,8 @@ const hot_see_show = () => {
             hot_product.classList.add("all"); 
             hot_product.classList.add("hot_grid");
             hot_back_btn.style.display = "none";
-            hot_next_btn.style.display = "none";   
+            hot_next_btn.style.display = "none";
+            hot_scroll.style.height = "auto";   
         } else {
             hot_see_btn.textContent = "See All";
             hot_product.classList.remove("all");
@@ -123,7 +126,8 @@ const hot_see_show = () => {
             hot_product.classList.add("less"); 
             hot_product.classList.add("hot_flex");   
             hot_back_btn.style.display = "";
-            hot_next_btn.style.display = "";  
+            hot_next_btn.style.display = ""; 
+            hot_scroll.style.height = "300px"; 
         }
 }
 
@@ -136,7 +140,9 @@ const feat_see_show = () => {
             feat_product.classList.add("all"); 
             feat_product.classList.add("feat_grid");
             feat_back_btn.style.display = "none";
-            feat_next_btn.style.display = "none";   
+            feat_next_btn.style.display = "none";  
+            
+            feat_scroll.style.height = "auto";
         } else {
             feat_see_btn.textContent = "See All";
             feat_product.classList.remove("all");
@@ -145,6 +151,8 @@ const feat_see_show = () => {
             feat_product.classList.add("feat_flex");   
             feat_back_btn.style.display = "";
             feat_next_btn.style.display = "";  
+           
+            feat_scroll.style.height = "300px"
         }
 }
 

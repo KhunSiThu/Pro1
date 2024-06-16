@@ -13,7 +13,7 @@ const dark_text = document.querySelector(".dark_text");
 const quantities = document.querySelector(".quantities");
 const h_love_btn = document.querySelector(".h_love_btn");
 const fav = document.querySelector(".fav");
-const item_num = document.querySelector(".item_num");
+const item_num = document.querySelectorAll(".item_num");
 
 //hot & feat
 const hot_product = document.querySelector(".hot_product");
